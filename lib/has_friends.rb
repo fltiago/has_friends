@@ -74,6 +74,12 @@ module SimplesIdeias
         self.friends.reject { |friend| user.friends.include?(friend) or user == friend }
       end
 
+      def friends_of_friends
+        self.friends.collect do |friend|
+          friend.friends_not_in_common_with(self)
+        end.flatten.uniq
+      end
+
       private
       def destroy_all_friendships
         Friendship.delete_all({:user_id => id})
