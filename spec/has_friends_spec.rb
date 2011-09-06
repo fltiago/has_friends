@@ -42,6 +42,11 @@ describe "has_friends" do
     it "should respond to friends_of_friends method" do
       @vader.should respond_to(:friends_of_friends)
     end
+
+    it "should respond to destroy_friendship_with" do
+      @vader.should respond_to(:destroy_friendship_with)
+
+    end
   end
 
   describe "friends" do
@@ -106,6 +111,12 @@ describe "has_friends" do
 
     it "should return friends of vader's friends" do
       @vader.friends_of_friends.should == [@yoda, @han_solo]
+    end
+
+    it "should destroy friendship" do
+      expect {
+        @vader.destroy_friendship_with(@luke)
+      }.should change(Friendship, :count).by(-1)
     end
   end
 

@@ -80,6 +80,12 @@ module SimplesIdeias
         end.flatten.uniq
       end
 
+      # Destroyes (in both ways) the friendship
+      def destroy_friendship_with(friend)
+        friendship = friendship_for(friend)
+        friendship.destroy
+      end
+
       private
       def destroy_all_friendships
         Friendship.delete_all({:user_id => id})
