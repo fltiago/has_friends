@@ -118,6 +118,11 @@ describe "has_friends" do
         @vader.destroy_friendship_with(@luke)
       }.should change(Friendship, :count).by(-2)
     end
+
+    it "should verify friendship" do
+      @vader.friends?(@han_solo).should_not be_nil
+
+    end
   end
 
   describe "friendship request" do
