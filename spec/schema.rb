@@ -15,4 +15,8 @@ ActiveRecord::Schema.define(:version => 0) do
     t.string :status
     t.timestamps
   end
+
+  create_table :things do |t|
+    t.references :friendship
+  end
 end

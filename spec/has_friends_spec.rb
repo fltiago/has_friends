@@ -187,6 +187,27 @@ describe "has_friends" do
       @friendship = Friendship.new(:status => 'requested')
       @friendship.should be_requested
     end
+
+    context "when attaching has_many" do
+      before do
+        class Thing < ActiveRecord::Base
+          belongs_to :friendship
+        end
+
+        class Friendship < ActiveRecord::Base
+          has_many :things, :dependent => :destroy
+        end
+      end
+
+      it "should destroy related" do
+        @friendships = create_friendship @vader, @han_solo
+        @thing = Thing.create(:friendship => @friendships.first)
+        expect {
+          @vader.destroy
+          @han_solo.destroy
+        }.should change(Thing, :count).by(-1)
+      end
+    end
   end
 
   describe "pagination" do
