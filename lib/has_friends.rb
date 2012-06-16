@@ -67,17 +67,21 @@ module SimplesIdeias
       end
 
       def friends_in_common_with(user)
-        self.friends.select { |friend| user.friends.include?(friend) }
+        self.friends.where("users.id IN (?)", user.friends.collect(&:id))
       end
 
       def friends_not_in_common_with(user)
-        self.friends.reject { |friend| user.friends.include?(friend) or user == friend }
+        self.friends.where("users.id NOT IN (?)",
+                           user.friends.collect(&:id) << user.id)
       end
 
       def friends_of_friends
-        self.friends.collect do |friend|
-          friend.friends_not_in_common_with(self)
-        end.flatten.uniq
+        friends_ids = self.friends.collect(&:id)
+        fof_ids = Friendship.select("friend_id").
+          where("user_id IN (?)"" AND friend_id NOT IN (?)",
+                friends_ids, friends_ids << self.id)
+
+        User.where("id IN (?)", fof_ids.collect(&:friend_id))
       end
 
       # Destroyes (in both ways) the friendship

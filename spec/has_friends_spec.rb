@@ -102,16 +102,17 @@ describe "has_friends" do
     end
 
     it "should return vader and luke friends in common" do
-      @vader.friends_in_common_with(@luke).should == [@leia]
+      @vader.friends_in_common_with(@luke).to_set.should == [@leia].to_set
     end
 
     it "should return vader and luke friends not in common" do
       create_friendship @vader, @han_solo
-      @vader.friends_not_in_common_with(@luke).should == [@han_solo]
+      @vader.friends_not_in_common_with(@luke).to_set.should ==
+        [@han_solo].to_set
     end
 
     it "should return friends of vader's friends" do
-      @vader.friends_of_friends.should == [@yoda, @han_solo]
+      @vader.friends_of_friends.to_set.should == [@yoda, @han_solo].to_set
     end
 
     it "should destroy friendship" do
